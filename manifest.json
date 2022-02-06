@@ -1,0 +1,43 @@
+{
+
+  "manifest_version": 2,
+  "name": "Ghost DeTracker",
+  "version": "0.1",
+
+  "description": "removes common tracking url parameters from links.",
+
+  "permissions": [
+    "activeTab",
+    "webRequest",
+    "webRequestBlocking",
+    "contextMenus",
+    "storage",
+    "<all_urls>"
+  ],
+  "optional_permissions": [
+      "clipboardWrite"
+  ],
+
+
+  "background": { 
+    "scripts": ["ghost_detracker.js"]
+  },
+
+  "browser_action": {
+      "default_title": "Ghost DeTracker",
+      "default_popup": "popup/action.html"
+  },
+
+  "options_ui": {
+      "page": "options/options.html",
+      "browser_style": true
+  },
+  "browser_specific_settings": {
+      "gecko": {
+          "id": "tmp_foobar@baz.xyz",
+          "strict_min_version": "57.0a1"
+      }
+  }
+
+}
+
