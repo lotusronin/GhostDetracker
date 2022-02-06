@@ -15,29 +15,28 @@ const cleaners = [
     /&?vero_(?:conv|id)=[^&]*/g,
     // s_cid, mc_eid, rb_clickid, msclkid, igshid, wickedid, yclid
     /&?(?:s_c|mc_e|rb_click|msclk|igsh|wicked|ycl)id=[^&]*/g,
+    // utm_* parameters
+    /&?utm_[^=&]*=[^&]*/g,
     // misc
     /&?_hsenc=[^&]*/g,
     /&?_openstat=[^&]*/g,
     /&?hsCtaTracking=[^&]*/g,
     /&?mkt_tok=[^&]*/g
 ]
-const utm_cleaner = /&?utm_[^=&]*=[^&]*/g
 const twitter_cleaner = /\?(?:t=[^&]*&)?s=[^&]*/
 const final_cleanup = /\/\?&?$/g
 
 function cleanUrl(url, do_log=false) {
     let working_url = url
 
-    // Clean using list from privacytests.org
+    // Clean Params from list at privacytests.org
+    // as well as utm params
     if(do_log) { console.log("Cleaning: "+working_url); }
     cleaners.forEach((cleaner) => {
         working_url = working_url.replaceAll(cleaner,"");
         if(do_log) { console.log(working_url); }
         return;
     })
-
-    // Clean off utm_* params
-    working_url= working_url.replaceAll(utm_cleaner,"")
 
     // Clean site specific tracking params
     if(working_url.includes("twitter.com")) {
@@ -59,9 +58,7 @@ function cleanRequestURL(requestDetails) {
     if(clean_url === requestDetails.url) { return; }
     console.log("Original: "+requestDetails.url);
     console.log("Cleaned: "+clean_url);
-    return {
-        redirectUrl: clean_url
-    };
+    return { redirectUrl: clean_url };
 }
 
 browser.webRequest.onBeforeRequest.addListener(
